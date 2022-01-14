@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Rad sa tabelama kalendar</title>
+    <meta charset="UTF-8">
+    <style>
+        #kalendar {
+            border: 4px solid darkblue;
+            border-collapse: collapse;
+        }
+        #kalendar thead tr th {
+            font-size: 10pt;
+            background-color: #57a;
+            color: #ffffff;
+        }
+        #kalendar tbody tr td {
+            border: 1px dashed #57a;
+            padding: 5px;
+            width: 30px;
+            height: 30px;
+            text-align: right;
+            vertical-align: top;
+            font-size: 9pt;
+        }
+        #kalendar tbody tr:nth-child(odd) td {
+            background-color: #FDFDFD;
+        }
+        #kalendar tbody tr td:last-child {
+            background-color: #FA9;
+        }
+        #kalendar tbody tr td:nth-child(6){
+            background-color: #EEE;
+        }
+    </style>
+</head>
+<body>
+    <table id="kalendar">
+        <thead>
+            <tr>
+                <th colspan="7" id="title">
+            <tr>
+                <th>Pon
+                <th>Uto
+                <th>Sri
+                <th>Čet
+                <th>Pet
+                <th>Sub
+                <th>Ned
+        <tbody id="dani">
+
+
+
+    </table>
+
+
+<script>
+
+    function resetKalendara(){
+        document.getElementById("title").innerText = "";
+        document.getElementById("dani").innerHTML = "";
+    };
+
+    function popuniKalendar(godina, mjesec){
+        resetKalendara();
+
+        let imenaMjeseci = [
+            "januar", "februar", "mart", "april", "maj", "jun", "jul", "avgust", "septembar", "oktobar", "novembar", "decembar"
+        ];
+        let imeIzabranogMjeseca = imenaMjeseci[mjesec-1];
+        let title = imeIzabranogMjeseca + " " + godina;
+        document.getElementById("title").innerText = title;
+
+        let prviDan = new Date (godina, mjesec-1, 1);
+        let zadnjiDan = new Date (godina, mjesec, 0);
+
+        let prviDanUSedmici = prviDan.getDay();
+        if (prviDanUSedmici == 0) prviDanUSedmici == 7;
+
+        let zadnjiDanUSedmici = zadnjiDan.getDay();
+        if (zadnjiDanUSedmici == 0) zadnjiDanUSedmici == 7;
+
+        let brojDana = zadnjiDan.getDate();
+
+        let dani = [];
+
+        for (let i = 1; i < prviDanUSedmici; i++){
+            dani.push("");
+        }
+
+        for (let dan = 1; dan <= brojDana; dan++){
+            dani.push(dan);
+        }
+
+        for (let i = zadnjiDanUSedmici; i<7; i++){
+            dani.push("");
+        }
+
+        let nedelje = [];
+        while (dani.length > 0){
+            let narednaNedelja = dani.splice(0, 7);
+            nedelje.push(narednaNedelja);
+        }
+        popuniTeloKalendara(nedelje);
+    }
+
+    function popuniTeloKalendara(nedelje){
+        for (let nedelja of nedelje){
+            let red = document.createElement("tr");
+            for (let dan of nedelja){
+                let td = document.createElement("td");
+                td.innerText = dan;
+                red.appendChild(td);
+                }
+        document.getElementById("dani").appendChild(red);
+        }   
+    }
+
+    window.addEventListener("load", main);
+
+    function main (){
+        let sada = new Date ();
+        popuniKalendar(sada.getFullYear(), sada.getMonth()+1)
+
+        for( let day of document.getElementsByTagName('td') ) {
+                if ( sada.getDate() == day.innerText ) {
+                    day.style.backgroundColor = "#D33";
+                    day.style.color = "#ffffff";
+
+                }
+            }
+    }
+
+</script>
+
+</body>
+</html>
